@@ -1,4 +1,3 @@
-from typing import Any
 import pygame
 from pygame.sprite import Sprite
 
@@ -12,18 +11,14 @@ class Rain(Sprite):
         self.settings = r_game.settings
 
         # Load the image 
-        self.image = pygame.image.load("/Users/alexchen/Desktop/Python Crash Course /Image/star_4.png")
+        self.image = pygame.image.load("//Users/alexchen/Desktop/Python Crash Course /Python Crash Course Solution/solution_files/chapter_13/ex_13_3_raindrops/images/raindrop.png")
         self.rect = self.image.get_rect()
 
         # starting positon of the rain 
         self.rect.x, self.rect.y = self.rect.width, self.rect.height
 
-        self.x = float(self.rect.x)
+        self.y = float(self.rect.y)
 
-    # def update(self): 
-    #     self.y += self.settings.raindrop_speed
-    #     self.rect.y = self.y
-
-    def draw_rain(self):
-        """Draw the rain"""
-        self.screen.blit(self.image,self.rect)
+    def update(self): 
+        self.y += self.settings.raindrop_speed
+        self.rect.y = self.y
