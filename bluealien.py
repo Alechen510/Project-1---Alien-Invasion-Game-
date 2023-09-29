@@ -28,3 +28,14 @@ class Bluealien(Sprite):
     def draw_alien(self):
         """Draw the alien on the screen"""
         self.screen.blit(self.resized_alien_image,self.rect)
+    
+    def check_edges(self):
+        """Check if the alien has hit the edge of the screen"""
+        screen_rect = self.screen.get_rect()
+        return(self.rect.right >= screen_rect.right or self.rect.left <= 0)
+
+    def update(self): 
+        """Move the alien left or right."""
+        self.x += self.settings.alien_speed *self.settings.alien_fleet_direction
+        self.rect.x = self.x 
+        

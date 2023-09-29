@@ -45,6 +45,7 @@ class BlueAlienInvasion:
             self._check_events()
             self.ship.update()
             self._update_bullets()
+            self._update_aliens()
             self._update_screen()
             self.clock.tick(60)
 
@@ -125,23 +126,60 @@ class BlueAlienInvasion:
             # finished a row; reset the x position, and increment y position
             current_x = alien_width
             current_y += 2* alien_height
+
+    def _check_fleet_edges(self):
+        """Respond to alien hitting the edge of the screen"""
+        for alien in self.aliens.sprites():
+            if alien.check_edges():
+                self._change_fleet_direction()
+                break
     
+    
+    def _change_fleet_direction(self):
+        """Changing the alien fleet's direction"""
+        for alien in self.aliens.sprites():
+            alien.rect.y += self.settings.alien_fleet_drop_speed
+        self.settings.alien_fleet_direction *= -1
+
+    def _update_aliens(self):
+        """Update the aliens position """
+        self._check_fleet_edges()
+        self.aliens.update()
+
+        for alien in self.aliens.copy(): 
+            if alien.rect.bottom >= self.settings.screen_height:
+                self.aliens.remove(alien)
+
     def _update_bullets(self):
         """Update Position of bullets and get rid of old bullets."""
         self.bullets.update()
 
+        "updating the bullets, and removing off the screen bullets"
+        for bullet in self.bullets.copy():
+            if bullet.rect.bottom <= 0:
+                self.bullets.remove(bullet)
+        
+        print(len(self.bullets))
+
+        #Check for the any bullets hittings the aliens
+        self._check_bullet_alien_collisions()
+         
+    def _check_bullet_alien_collisions(self):
+        """respond to bullet hitting the alien"""
+        collision = pygame.sprite.groupcollide(
+            self.bullets,self.aliens,True,True)
+        
+        if not self.aliens:
+            #Destroy exisitn bullets and create new alien fleet
+            self.bullets.empty()
+            self._create_fleet()
+        
     def _update_screen(self):
         """Update images on screen and flip to the new screen"""
         # display blue color of the screen
         self.screen.fill(self.settings.bg_color)
         self.screen.blit(self.settings.background_image,(0,0))
 
-        # drawing the bullets
-        for bullet in self.bullets.copy():
-            if bullet.rect.bottom <= 0:
-                self.bullets.remove(bullet)
-
-        print(len(self.bullets))
 
         # showing the bullets
         for bullet in self.bullets.sprites():
@@ -150,7 +188,7 @@ class BlueAlienInvasion:
         # drawing the aliens
         for alien in self.aliens.sprites():
             alien.draw_alien()
-        
+       
     
         self.ship.blitme()
         # make the most recent drawn screen visible

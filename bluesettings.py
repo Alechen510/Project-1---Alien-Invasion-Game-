@@ -28,3 +28,6 @@ class Bluesettings:
 
         # Alien settings
         self.alien_size = (50, 50)
+        self.alien_speed = 1.5
+        self.alien_fleet_direction = 1
+        self.alien_fleet_drop_speed = 10

@@ -9,7 +9,7 @@ class Settings:
         black = (0, 0, 0)
         white = (255, 255, 255)
         Gray = (128, 128, 128)
-        self.bg_color = Gray
+        self.bg_color = black
         
 
         # Ship settings
