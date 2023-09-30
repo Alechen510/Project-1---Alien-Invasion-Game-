@@ -1,5 +1,6 @@
 import pygame
 from pygame.sprite import Sprite
+import random
 
 class Bluealien(Sprite): 
     """A class for Blue alien"""
@@ -38,4 +39,6 @@ class Bluealien(Sprite):
         """Move the alien left or right."""
         self.x += self.settings.alien_speed *self.settings.alien_fleet_direction
         self.rect.x = self.x 
-        
+
+
+    

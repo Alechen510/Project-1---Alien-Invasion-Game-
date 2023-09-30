@@ -51,3 +51,8 @@ class Bluealienship:
     def blitme(self):
         """Draw the dogeship at the current location"""
         self.screen.blit(self.resized_image, self.rect)
+
+    def _center_ship(self):
+        self.rect.midbottom = self.screen_rect.midbottom
+        self.x = float(self.rect.x)
+        self.y = float(self.rect.y)

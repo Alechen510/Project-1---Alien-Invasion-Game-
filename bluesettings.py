@@ -19,6 +19,7 @@ class Bluesettings:
         # Ship settings
         self.ship_speed = 5.5
         self.ship_size = (80, 80)
+        self.ship_lives = 3
 
         # Bullet settings
         self.bullet_width = 4

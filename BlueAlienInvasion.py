@@ -2,6 +2,8 @@ import sys
 
 import pygame
 
+from time import sleep
+
 from bluesettings import Bluesettings
 
 from bluealienship import Bluealienship
@@ -9,6 +11,9 @@ from bluealienship import Bluealienship
 from alienshipbullet import Alienshipbullet
 
 from bluealien import Bluealien
+
+from bluegamestats import Bluegamestats
+
 
 class BlueAlienInvasion:
     """Blue Alieninvasion class with all assets"""
@@ -21,6 +26,9 @@ class BlueAlienInvasion:
         self.settings = Bluesettings()
         # importing modes
         self.screen = self.settings.screen
+
+        # Create an instance of the game stats: 
+        self.stats = Bluegamestats(self)
 
         # importing dogeship
         self.ship = Bluealienship(self)
@@ -38,6 +46,7 @@ class BlueAlienInvasion:
         self.aliens = pygame.sprite.Group()
         #creating the alien fleets
         self._create_fleet()
+
 
     def run_game(self):
         """ "Starting the main loop for the game."""
@@ -150,6 +159,9 @@ class BlueAlienInvasion:
             if alien.rect.bottom >= self.settings.screen_height:
                 self.aliens.remove(alien)
 
+        if pygame.sprite.spritecollideany(self.ship,self.aliens): 
+            self._ship_hit()
+
     def _update_bullets(self):
         """Update Position of bullets and get rid of old bullets."""
         self.bullets.update()
@@ -159,7 +171,7 @@ class BlueAlienInvasion:
             if bullet.rect.bottom <= 0:
                 self.bullets.remove(bullet)
         
-        print(len(self.bullets))
+        #print(len(self.bullets))
 
         #Check for the any bullets hittings the aliens
         self._check_bullet_alien_collisions()
@@ -174,6 +186,32 @@ class BlueAlienInvasion:
             self.bullets.empty()
             self._create_fleet()
         
+
+    def _ship_hit(self): 
+        """Respsonse when ship got hit by an alien"""
+        if self.stats.ship_lives > 0: 
+            
+            #Decrease ship's life 
+            self.stats.ship_lives -= 1
+
+            #Reset aliens and bullets
+            self.bullets.empty()
+            self.aliens.empty()
+
+
+            #Create new aliens and recenter the ship on the screen
+            self._create_fleet()
+            self.ship._center_ship()
+
+            #Pause for a few seconds
+            sleep(3.0)
+
+
+            #Print out a message showing how many ships left
+            print("Ship hit!!")
+            print(f"\nYour have {self.stats.ship_lives} ships left.")
+
+
     def _update_screen(self):
         """Update images on screen and flip to the new screen"""
         # display blue color of the screen
