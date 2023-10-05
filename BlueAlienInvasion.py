@@ -14,6 +14,7 @@ from bluealien import Bluealien
 
 from bluegamestats import Bluegamestats
 
+from playbutton import Playbutton
 
 class BlueAlienInvasion:
     """Blue Alieninvasion class with all assets"""
@@ -47,14 +48,23 @@ class BlueAlienInvasion:
         #creating the alien fleets
         self._create_fleet()
 
+        #make a play button
+        self.play_button = Playbutton(self, 'Start Game!')
+
+        #start game in active state
+        self.game_active = False
 
     def run_game(self):
         """ "Starting the main loop for the game."""
         while True:
             self._check_events()
-            self.ship.update()
-            self._update_bullets()
-            self._update_aliens()
+
+            if self.game_active:
+                self.ship.update()
+                self._update_bullets()
+                self._update_aliens()
+                
+                
             self._update_screen()
             self.clock.tick(60)
 
@@ -69,6 +79,11 @@ class BlueAlienInvasion:
 
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
+
+            elif event.type  == pygame.MOUSEBUTTONDOWN: 
+                mouse_pos = pygame.mouse.get_pos()
+                self._check_play_button(mouse_pos)
+            
             
 
     def _check_keydown_events(self, event):
@@ -83,6 +98,8 @@ class BlueAlienInvasion:
             self.ship.moving_down = True
         elif event.key == pygame.K_SPACE:
             self._fire_bullet()
+        elif event.key==pygame.K_p:
+            self.game_active = True
         elif event.key == pygame.K_ESCAPE:
             sys.exit()
 
@@ -159,8 +176,14 @@ class BlueAlienInvasion:
             if alien.rect.bottom >= self.settings.screen_height:
                 self.aliens.remove(alien)
 
+         # looking for alien hitting ths hip        
+
         if pygame.sprite.spritecollideany(self.ship,self.aliens): 
             self._ship_hit()
+
+        #look for alien hitting the bottom of the screen
+
+        self._check_aliens_bottom()
 
     def _update_bullets(self):
         """Update Position of bullets and get rid of old bullets."""
@@ -211,6 +234,38 @@ class BlueAlienInvasion:
             print("Ship hit!!")
             print(f"\nYour have {self.stats.ship_lives} ships left.")
 
+        else:
+            self.game_active = False
+            pygame.mouse.set_visible(True)
+
+    
+    def _check_aliens_bottom(self):
+        """ Check if any aliens have reach the bottome of the screen"""
+        for alien in self.aliens.sprites():
+            if alien.rect.bottom >= self.settings.screen_height: 
+                self.ship_hit()
+                break
+
+    
+    def _check_play_button(self,mouse_pos):
+        """Check if play button is pressed"""
+        button_clicked = self.play_button.rect.collidepoint(mouse_pos)
+
+        if button_clicked and not self.game_active: 
+            #reset the game statisitic 
+            self.stats.reset_stats()
+            self.game_active = True 
+
+            #get rid of any remainning bullets and aliens 
+            self.bullets.empty() 
+            self.aliens.empty()
+
+            #create a new fleet of alien 
+            self._create_fleet()
+            self.ship._center_ship()
+
+            #make mouse cursor not visible when game is active
+            pygame.mouse.set_visible(False)
 
     def _update_screen(self):
         """Update images on screen and flip to the new screen"""
@@ -227,13 +282,24 @@ class BlueAlienInvasion:
         for alien in self.aliens.sprites():
             alien.draw_alien()
        
-    
+        # draw the ship itself
         self.ship.blitme()
+
+        # show the play buttons
+        if not self.game_active: 
+            self.play_button.draw_button()
+            self.aliens.empty()
+            self._create_fleet()
+            self.ship._center_ship()
+
         # make the most recent drawn screen visible
         pygame.display.flip()
+
+
 
 
 if __name__ == "__main__":
     # make a game instance and run game
     blue_ai = BlueAlienInvasion()
     blue_ai.run_game()
+

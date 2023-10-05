@@ -19,7 +19,7 @@ class Bluesettings:
         # Ship settings
         self.ship_speed = 5.5
         self.ship_size = (80, 80)
-        self.ship_lives = 3
+        self.ship_lives = 1
 
         # Bullet settings
         self.bullet_width = 4
@@ -29,6 +29,6 @@ class Bluesettings:
 
         # Alien settings
         self.alien_size = (50, 50)
-        self.alien_speed = 1.5
+        self.alien_speed = 5
         self.alien_fleet_direction = 1
-        self.alien_fleet_drop_speed = 10
+        self.alien_fleet_drop_speed = 50
