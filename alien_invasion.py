@@ -134,17 +134,21 @@ class AlienInvasion:
         for bullet in self.bullets.copy():
             if bullet.rect.bottom <= 0:
                 self.bullets.remove(bullet)
-        #print(len(self.bullets))
+                
+            self._check_bullet_alien_collision()
 
-        #Check for any bullets that have hit the aliens
-        #If so, removed the bullet and the alien
+
+    def _check_bullet_alien_collision(self):
+        """heck for any bullets that have hit the aliens"""
         collisions = pygame.sprite.groupcollide(
             self.bullets,self.aliens,True,True)
         
         if not self.aliens:
             # Destroy exisiting bullets and create new fleet
             self.bullets.empty()
-            self._create_alien_fleet()
+            self._create_fleet()
+            self.settings.increase_speed()
+
         
 
     def _create_alien(self, x_position,y_position): 
@@ -163,7 +167,7 @@ class AlienInvasion:
         alien_width,alien_height = alien.rect.size
         current_x,current_y = alien_width, alien_height
 
-        while current_y < (self.settings.screen_height - 3 * alien_height):
+        while current_y < (self.settings.screen_height/2):
             while current_x <(self.settings.screen_width - 2 * alien_width):
                 self._create_alien(current_x,current_y)
                 current_x += 2 * alien_width
@@ -254,6 +258,9 @@ class AlienInvasion:
         button_clicked = self.play_button.rect.collidepoint(mouse_pos)
 
         if button_clicked and not self.game_active:
+            #Reset game settings.
+            self.settings.initialize_dynamic_settings()
+
             #reset the game statistic. 
             self.stats.reset_stats()
             self.game_active = True
@@ -268,6 +275,7 @@ class AlienInvasion:
 
             # Hide the mouse cursor. 
             pygame.mouse.set_visible(False)
+
 
     def _update_screen(self):
         """Update images on screen and flip to the new screen"""

@@ -208,6 +208,7 @@ class BlueAlienInvasion:
             #Destroy exisitn bullets and create new alien fleet
             self.bullets.empty()
             self._create_fleet()
+            self.settings.increase_speed()
         
 
     def _ship_hit(self): 
@@ -252,6 +253,9 @@ class BlueAlienInvasion:
         button_clicked = self.play_button.rect.collidepoint(mouse_pos)
 
         if button_clicked and not self.game_active: 
+            #Resetting game speed back to default
+            self.settings.initialize_dynamic_settings()
+
             #reset the game statisitic 
             self.stats.reset_stats()
             self.game_active = True 
@@ -266,6 +270,16 @@ class BlueAlienInvasion:
 
             #make mouse cursor not visible when game is active
             pygame.mouse.set_visible(False)
+
+    def _reset_screen_items(self): 
+        """Class to reset and create aliens and recenter ship"""
+        #empty screen aliens and empty bullets
+        self.aliens.empty()
+        self.bullets.empty()
+
+        #recreate aliens and recenter ship
+        self._create_fleet()
+        self.ship._center_ship()
 
     def _update_screen(self):
         """Update images on screen and flip to the new screen"""
@@ -288,9 +302,7 @@ class BlueAlienInvasion:
         # show the play buttons
         if not self.game_active: 
             self.play_button.draw_button()
-            self.aliens.empty()
-            self._create_fleet()
-            self.ship._center_ship()
+            self._reset_screen_items()
 
         # make the most recent drawn screen visible
         pygame.display.flip()
