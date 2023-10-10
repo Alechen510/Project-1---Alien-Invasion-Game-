@@ -134,7 +134,7 @@ class BlueAlienInvasion:
         new_alien = Bluealien(self)
         new_alien.x= x_position
         new_alien.rect.x = x_position
-        new_alien.rect.y = y_position
+        new_alien.rect.y= y_position
         self.aliens.add(new_alien)
 
     def _create_fleet(self):
@@ -144,6 +144,8 @@ class BlueAlienInvasion:
         alien = Bluealien(self)
         alien_width, alien_height = alien.rect.size
         current_x, current_y = alien_width, alien_height
+
+        current_y += 50
 
         #while loop creating the aliens fleets
         # Outter while loop focus on y axis 
@@ -207,9 +209,12 @@ class BlueAlienInvasion:
         collision = pygame.sprite.groupcollide(
             self.bullets,self.aliens,True,True)
         
+        # for loop will make sure all the score counts based on how many aliens were hit by the bullets. 
         if collision: 
-            self.stats.score += self.settings.alien_point
+            for alien in collision.values():
+                self.stats.score += self.settings.alien_point * len(alien)
             self.scoreboard.prep_score()
+            self.scoreboard.prep_highest_score()
         
         if not self.aliens:
             #Destroy exisitn bullets and create new alien fleet
@@ -224,6 +229,7 @@ class BlueAlienInvasion:
             
             #Decrease ship's life 
             self.stats.ship_lives -= 1
+            self.scoreboard.prep_ships()
 
             #Reset aliens and bullets
             self.bullets.empty()
@@ -262,9 +268,11 @@ class BlueAlienInvasion:
         if button_clicked and not self.game_active: 
             #Resetting game speed back to default
             self.settings.initialize_dynamic_settings()
+            self.scoreboard.prep_ships()
 
             #reset the game statisitic 
             self.stats.reset_stats()
+            self.scoreboard.prep_score()
             self.game_active = True 
 
             #get rid of any remainning bullets and aliens 
@@ -309,10 +317,11 @@ class BlueAlienInvasion:
         # draw the ship itself
         self.ship.blitme()
 
-        # show the play buttons
+        # show the play buttons and reinitialize the items on screen
         if not self.game_active: 
             self.play_button.draw_button()
             self._reset_screen_items()
+            self.scoreboard.reset_score()
 
         # make the most recent drawn screen visible
         pygame.display.flip()

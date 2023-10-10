@@ -148,8 +148,10 @@ class AlienInvasion:
             self.bullets,self.aliens,True,True)
         
         if collisions: 
-            self.stats.score += self.settings.alien_points
+            for aliens in collisions.values():
+                self.stats.score += self.settings.alien_points *len(aliens)
             self.scoreboard.prep_score()
+            self.scoreboard.prep_highest_score()
         
         if not self.aliens:
             # Destroy exisiting bullets and create new fleet
@@ -234,6 +236,7 @@ class AlienInvasion:
         if self.stats.ship_limit> 0:
             #decreament ship_left.
             self.stats.ship_limit -= 1
+            self.scoreboard.prep_ships()
 
             # getrid of any remaining bullets and aliens: 
             self.bullets.empty()
@@ -271,6 +274,8 @@ class AlienInvasion:
 
             #reset the game statistic. 
             self.stats.reset_stats()
+            self.scoreboard.prep_score()
+            self.scoreboard.prep_ships()
             self.game_active = True
 
             # Get rid of any remaining bullets and aliens. 
@@ -291,6 +296,7 @@ class AlienInvasion:
 
         #Draw the scoreboard information 
         self.scoreboard.show_score() 
+    
 
         #Draws the bullets
         for bullet in self.bullets.sprites():

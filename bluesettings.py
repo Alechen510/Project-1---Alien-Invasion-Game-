@@ -35,6 +35,7 @@ class Bluesettings:
 
         #How quickly the game speed up
         self.game_speed_scale = 1.5
+        self.alien_point_scale = 1.5
 
         self.initialize_dynamic_settings()
 
@@ -53,3 +54,6 @@ class Bluesettings:
         self.ship_speed *= self.game_speed_scale
         self.bullet_speed *= self.game_speed_scale
         self.alien_speed *= self.game_speed_scale
+        #Recaulate the alien point according to alien point scale after each level 
+        self.alien_point = int(self.alien_point * self.alien_point_scale)
+        print(self.alien_point)

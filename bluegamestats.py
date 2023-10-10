@@ -5,6 +5,7 @@ class Bluegamestats:
         """initalizes the statistics"""
         self.settings = blue_ai.settings
         self.reset_stats()
+        self.highest_score = 0
 
     def reset_stats(self):
         """Reset statisitc during game."""

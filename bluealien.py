@@ -19,9 +19,9 @@ class Bluealien(Sprite):
         self.rect = self.resized_alien_image.get_rect()
 
         #start each new alien on top left of the screen 
-        # self.rect.x = self.rect.width
-        # self.rect.y = self.rect.height
-        self.rect.x, self.rect.y = self.rect.size
+        #self.rect.x= self.rect.width
+        #self.rect.y= self.rect.height
+        self.rect.x, self.rect.y = self.rect.size 
 
         #store the alien's horizontal position
         self.x = float(self.rect.x)

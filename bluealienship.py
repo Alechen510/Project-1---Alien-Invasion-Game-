@@ -1,11 +1,13 @@
 import pygame
+from pygame.sprite import Sprite
 
 
-class Bluealienship:
+class Bluealienship(Sprite):
     """A class to mange the dogeship."""
 
     def __init__(self, blue_ai_game):
         """Initialize the dogeship and set it starting position."""
+        super().__init__()
         self.screen = blue_ai_game.screen
         self.settings = blue_ai_game.settings
         self.screen_rect = blue_ai_game.screen.get_rect()
@@ -56,3 +58,4 @@ class Bluealienship:
         self.rect.midbottom = self.screen_rect.midbottom
         self.x = float(self.rect.x)
         self.y = float(self.rect.y)
+
