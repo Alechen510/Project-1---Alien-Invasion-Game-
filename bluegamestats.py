@@ -9,3 +9,4 @@ class Bluegamestats:
     def reset_stats(self):
         """Reset statisitc during game."""
         self.ship_lives = self.settings.ship_lives
+        self.score = 0

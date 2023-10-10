@@ -46,6 +46,7 @@ class Bluesettings:
 
         #fleet_direction of 1 represent right, -1 represent left
         self.fleet_direction = 1
+        self.alien_point = 50
 
     def increase_speed(self): 
         """Iincrease the speed by mulitplying the game_speed_scale"""

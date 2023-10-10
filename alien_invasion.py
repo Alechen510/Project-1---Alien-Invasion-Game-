@@ -18,6 +18,8 @@ from star import Star
 
 from button import Button
 
+from scoreboard import Scoreboard
+
 from random import randint 
 
 
@@ -46,6 +48,8 @@ class AlienInvasion:
 
         # Create an instance to store game statisitic. 
         self.stats = Gamestats(self) 
+        self.scoreboard = Scoreboard(self)
+
 
         # Setting up the ship
         self.ship = Ship(self)
@@ -142,6 +146,10 @@ class AlienInvasion:
         """heck for any bullets that have hit the aliens"""
         collisions = pygame.sprite.groupcollide(
             self.bullets,self.aliens,True,True)
+        
+        if collisions: 
+            self.stats.score += self.settings.alien_points
+            self.scoreboard.prep_score()
         
         if not self.aliens:
             # Destroy exisiting bullets and create new fleet
@@ -280,6 +288,9 @@ class AlienInvasion:
     def _update_screen(self):
         """Update images on screen and flip to the new screen"""
         self.screen.fill(self.settings.bg_color)
+
+        #Draw the scoreboard information 
+        self.scoreboard.show_score() 
 
         #Draws the bullets
         for bullet in self.bullets.sprites():

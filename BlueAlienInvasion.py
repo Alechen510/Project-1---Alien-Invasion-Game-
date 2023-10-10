@@ -16,6 +16,8 @@ from bluegamestats import Bluegamestats
 
 from playbutton import Playbutton
 
+from bluescoreboard import Bluescoreboard
+
 class BlueAlienInvasion:
     """Blue Alieninvasion class with all assets"""
 
@@ -30,6 +32,7 @@ class BlueAlienInvasion:
 
         # Create an instance of the game stats: 
         self.stats = Bluegamestats(self)
+        self.scoreboard = Bluescoreboard(self)
 
         # importing dogeship
         self.ship = Bluealienship(self)
@@ -204,6 +207,10 @@ class BlueAlienInvasion:
         collision = pygame.sprite.groupcollide(
             self.bullets,self.aliens,True,True)
         
+        if collision: 
+            self.stats.score += self.settings.alien_point
+            self.scoreboard.prep_score()
+        
         if not self.aliens:
             #Destroy exisitn bullets and create new alien fleet
             self.bullets.empty()
@@ -286,6 +293,9 @@ class BlueAlienInvasion:
         # display blue color of the screen
         self.screen.fill(self.settings.bg_color)
         self.screen.blit(self.settings.background_image,(0,0))
+
+        #display the scoreboard
+        self.scoreboard.show_score()
 
 
         # showing the bullets

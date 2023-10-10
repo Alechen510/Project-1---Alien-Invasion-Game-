@@ -9,7 +9,7 @@ class Settings:
         black = (0, 0, 0)
         white = (255, 255, 255)
         Gray = (230, 230, 230)
-        self.bg_color = Gray
+        self.bg_color = black
         
 
         # Ship settings
@@ -43,6 +43,9 @@ class Settings:
 
         #fleet_direction of 1 represents right; -1 represents left.
         self.fleet_direction = 1
+
+        # scoring settings 
+        self.alien_points = 50
 
     def increase_speed(self): 
         """Increase speed settings."""
